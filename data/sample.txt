@@ -1,0 +1,1 @@
+Sample policy document for testing the FAQ generator system.
