@@ -1,0 +1,23 @@
+400 models/gemini-1.0-pro-001 is not found for CREATE TUNED MODEL at API version v1beta.
+Traceback (most recent call last):
+  File "C:\Users\penju\OneDrive - Alliance University\Desktop\FAQ 1\finetune.py", line 44, in main
+    operation = genai.create_tuned_model(
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\generativeai\models.py", line 364, in create_tuned_model
+    operation = client.create_tuned_model(
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\ai\generativelanguage_v1beta\services\model_service\client.py", line 1294, in create_tuned_model
+    response = rpc(
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\retry\retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\retry\retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\retry\retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\retry\retry_unary.py", line 147, in retry_target
+    result = target()
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\penju\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.FailedPrecondition: 400 models/gemini-1.0-pro-001 is not found for CREATE TUNED MODEL at API version v1beta.
