@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>DOCUMENT INSIGHTS</h2>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="openTab('summary')">Summary</button>
+    <button class="tab-btn" onclick="openTab('faq')">FAQs</button>
+    <button class="tab-btn" onclick="openTab('chat')">Chatbot</button>
+</div>
+
+<div id="summary" class="tab-content active">
+    <h3>Summary</h3>
+    <p id="summary-text">Loading summary...</p>
+</div>
+
+<div id="faq" class="tab-content">
+    <h3>Top 10 FAQs</h3>
+    <ul id="faq-list" style="list-style: none; text-align: left; padding: 0;">
+        <li>Loading FAQs...</li>
+    </ul>
+</div>
+
+<div id="chat" class="tab-content">
+    <h3>Emotion AI Chat</h3>
+    <div id="chat-window" class="chat-window">
+        <div class="message bot-msg">Hello! I've read the document. How can I help you?</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="user-input" class="chat-input" placeholder="Type your message...">
+        <button onclick="sendMessage()" style="margin:0; padding: 10px 15px;">➤</button>
+    </div>
+</div>
+
+<script>
+    const fileId = "{{ file_id }}";
+
+    // Load Data with Polling
+    function loadData() {
+        console.log("Polling for data...");
+        fetch(`/api/data/${fileId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ai_status === 'processing') {
+                    document.getElementById('summary-text').innerHTML = "<em>Generating insights with AI... (this may take a few seconds)</em>";
+                    document.getElementById('faq-list').innerHTML = "<li><em>Analyzing document...</em></li>";
+                    setTimeout(loadData, 2000); // Poll again in 2s
+                    return;
+                }
+
+                // Notify backend that QR was scanned/opened
+                fetch(`/api/scan_event/${fileId}`, { method: 'POST' });
+
+                // Populate Summary
+                document.getElementById('summary-text').innerText = data.summary;
+
+                // Populate FAQs
+                const faqList = document.getElementById('faq-list');
+                faqList.innerHTML = '';
+                if (data.faqs && data.faqs.length > 0) {
+                    data.faqs.forEach(faq => {
+                        const li = document.createElement('li');
+                        li.style.marginBottom = '15px';
+                        li.innerHTML = `<strong>Q: ${faq.question}</strong><br><span style="opacity:0.8">A: ${faq.answer}</span>`;
+                        faqList.appendChild(li);
+                    });
+                } else {
+                    faqList.innerHTML = "<li>No FAQs generated or error occurred.</li>";
+                }
+            })
+            .catch(err => console.error("Error loading data:", err));
+    }
+
+    // Start loading
+    loadData();
+
+    // Tab Logic
+    function openTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Chat Logic
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Add user message
+        addMessage(text, 'user-msg');
+        input.value = '';
+
+        // Send to backend
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, file_id: fileId })
+        })
+            .then(res => res.json())
+            .then(data => {
+                addMessage(data.response, 'bot-msg');
+            })
+            .catch(err => {
+                addMessage("Error connecting to bot.", 'bot-msg');
+            });
+    }
+
+    function addMessage(text, className) {
+        const div = document.createElement('div');
+        div.className = `message ${className}`;
+        div.innerText = text;
+        const window = document.getElementById('chat-window');
+        window.appendChild(div);
+        window.scrollTop = window.scrollHeight;
+    }
+
+    // Allow Enter key to send
+    document.getElementById('user-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+{% endblock %}

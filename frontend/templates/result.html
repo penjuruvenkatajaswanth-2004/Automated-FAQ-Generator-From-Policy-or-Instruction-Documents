@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>SCAN ME</h1>
+<p>Scan this QR code with your mobile to view the generated Summary, FAQs, and Chatbot.</p>
+
+<div class="qr-container">
+    <img src="{{ url_for('static', filename='uploads/' + qr_image) }}" alt="QR Code"
+        style="width: 250px; border-radius: 10px; margin: 20px 0;">
+</div>
+
+<p><small><a href="{{ mobile_url }}" target="_blank" style="color: rgba(255,255,255,0.7); text-decoration: none;">(Or
+            click here for demo)</a></small></p>
+<a href="/" class="btn" style="display:block; margin-top:20px; color:white; text-decoration:none;">Upload Another</a>
+
+<script>
+    const fileId = "{{ file_id }}";
+    // Poll every 2 seconds to check if mobile has scanned
+    const interval = setInterval(() => {
+        fetch(`/api/check_scan/${fileId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'scanned') {
+                    clearInterval(interval);
+                    // Redirect desktop to the content view as well
+                    window.location.href = `/mobile/${fileId}`;
+                }
+            })
+            .catch(err => console.error("Polling error:", err));
+    }, 2000);
+</script>
+{% endblock %}

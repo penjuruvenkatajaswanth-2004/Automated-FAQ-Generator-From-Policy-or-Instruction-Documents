@@ -1,15 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>FAQ Generator</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
+{% block content %}
+<h1>DOC UPLOAD</h1>
+<p>Upload your PDF, DOCX, or TXT file to generate FAQs and Summary.</p>
 
-<h1>Automated FAQ Generator</h1>
+<form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+    <div style="margin-bottom: 20px; text-align: left;">
+        <label for="language" style="display:block; margin-bottom: 5px; color: #ddd;">Select Output Language:</label>
+        <select name="language" id="language"
+            style="width: 100%; padding: 10px; border-radius: 10px; border: none; background: rgba(255,255,255,0.9);">
+            <option value="English">English</option>
+            <!--
+            <option value="Hindi">Hindi</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Japanese">Japanese</option>>
+    -->
+        </select>
+    </div>
 
-<input type="file">
-<button>Generate FAQ</button>
-
-</body>
-</html>
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <p>Click to Upload or Drag & Drop</p>
+        <input type="file" name="file" id="fileInput" hidden required accept=".pdf,.docx,.txt"
+            onchange="this.form.submit()">
+    </div>
+</form>
+{% endblock %}
