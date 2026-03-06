@@ -1,3 +1,240 @@
-body{
-    font-family: Arial;
+:root {
+    --primary-color: #6a11cb;
+    --secondary-color: #2575fc;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.glass-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+button,
+.upload-btn {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* File Upload */
+.upload-area {
+    border: 2px dashed var(--glass-border);
+    padding: 40px;
+    border-radius: 10px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Tabs for Mobile View */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.tab-btn {
+    background: transparent;
+    border-radius: 0;
+    margin: 0;
+    padding: 10px;
+    flex: 1;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    position: relative;
+    box-shadow: none;
+}
+
+.tab-btn:hover {
+    transform: none;
+    box-shadow: none;
+    opacity: 1;
+}
+
+.tab-btn.active {
+    opacity: 1;
+    border-bottom: 3px solid #ff00cc;
+}
+
+.tab-content {
+    display: none;
+    text-align: left;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Chatbot Styles */
+.chat-window {
+    height: 300px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.message {
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 15px;
+    max-width: 80%;
+    font-size: 0.9rem;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background: #6a11cb;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+/* --- Desktop Optimization --- */
+@media (min-width: 768px) {
+
+    /* Increase container width for better use of space on laptops */
+    .glass-container {
+        max-width: 900px;
+        padding: 3rem;
+    }
+
+    /* scale up base font size */
+    body {
+        font-size: 1.1rem;
+    }
+
+    /* Make headings larger */
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    /* Button adjustments */
+    button,
+    .upload-btn,
+    .tab-btn {
+        font-size: 1.1rem;
+        padding: 15px 30px;
+    }
+
+    /* Tab Content - significantly easier to read */
+    .tab-content {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        max-height: 70vh;
+        /* Allow more vertical space */
+    }
+
+    /* Chat specific adjustments */
+    .chat-window {
+        height: 450px;
+        /* Taller chat window */
+    }
+
+    .message {
+        font-size: 1.1rem;
+        max-width: 70%;
+        /* Don't stretch full width */
+    }
+
+    .chat-input {
+        font-size: 1.1rem;
+        padding: 15px;
+    }
 }
